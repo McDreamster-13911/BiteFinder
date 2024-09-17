@@ -40,14 +40,15 @@ const Restaurant_card = (props) => {
 
 export const with_Discount_Label = (Restaurant_card) => {
 
-    return (props) => {
+    return ({ discountHeader, discountSubHeader, ...props }) => {
         return (
-          <div className="relative">
-            <label className="absolute z-20 text-white bg-gradient-to-r from-black to-slate-500 p-0.5 px-3 rounded-lg shadow-2xl text-sm font-semibold tracking-wide transform -translate-y-1 ">
-              {props.discountHeader} - {props.discountSubHeader}
-            </label>
-            <Restaurant_card {...props} />
-          </div>
+            <div>
+                <label className="absolute z-20 text-white bg-gradient-to-r from-slate-400 to-slate-600 p-0.5 px-3 rounded-lg shadow-lg text-sm font-semibold tracking-wide transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-xl">
+    {discountHeader} - {discountSubHeader}
+</label>
+
+                <Restaurant_card {...props} />
+            </div>
         );
     };
 };
