@@ -41,6 +41,7 @@ const Body = () => {
       }
 
       const json_data = await response.json();
+      console.log("Received data:", json_data);
       const restaurant_obj_data_from_api =
         json_data?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
           ?.restaurants;
