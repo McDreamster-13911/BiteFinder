@@ -31,15 +31,28 @@ const Body = () => {
   }, []);
 
   const fetch_data = async () => {
-    const data = await fetch(
-      "https://bitefinder-server.onrender.com/api/restaurants?lat=17.406498&lng=78.47724389999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
+    try {
+      const response = await fetch(
+        "https://bitefinder-server.onrender.com/api/restaurants?lat=17.406498&lng=78.47724389999999&page_type=DESKTOP_WEB_LISTING"
+      );
 
-    const json_data = await data.json();
-    const restaurant_obj_data_from_api =
-      json_data?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants;
-    set_all_restaurants(restaurant_obj_data_from_api);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json_data = await response.json();
+      const restaurant_obj_data_from_api =
+        json_data?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants;
+      
+      if (restaurant_obj_data_from_api) {
+        set_all_restaurants(restaurant_obj_data_from_api);
+      } else {
+        console.error("Unexpected data structure:", json_data);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const online_status = useOnlineStatus();
