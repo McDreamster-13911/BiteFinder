@@ -2,9 +2,15 @@ const PROXY_SERVER_URL = "https://bitefinder-server.onrender.com";
 const FALLBACK_SERVER_URL = "https://corsproxy.io/?"; // This is a public CORS proxy as a fallback
 
 async function fetchWithRetry(url, options, retries = 3) {
+  const defaultOptions = {
+    mode: 'cors',
+    credentials: 'include',
+    ...options
+  };
+
   for (let i = 0; i < retries; i++) {
     try {
-      const response = await fetch(url, options);
+      const response = await fetch(url, defaultOptions);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       return await response.json();
     } catch (e) {
