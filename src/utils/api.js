@@ -4,8 +4,7 @@ const FALLBACK_SERVER_URL = "https://corsproxy.io/?"; // This is a public CORS p
 async function fetchWithRetry(url, options, retries = 3) {
   const defaultOptions = {
     mode: 'cors',
-    credentials: 'include',
-    ...options
+    
   };
 
   for (let i = 0; i < retries; i++) {
