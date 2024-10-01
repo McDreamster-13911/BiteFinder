@@ -4,6 +4,7 @@ import Shimmer from "./Shimmer";
 import Search_Component from "./Search_Component";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import { fetchRestaurants } from "utils/api";
 
 const Body = () => {
   const [all_restaurants, set_all_restaurants] = useState([]);
@@ -32,27 +33,25 @@ const Body = () => {
 
   const fetch_data = async () => {
     try {
-      const response = await fetch(
-        "https://bitefinder-server.onrender.com/api/restaurants?lat=17.406498&lng=78.47724389999999&page_type=DESKTOP_WEB_LISTING"
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const json_data = await response.json();
+      setIsLoading(true);
+      const json_data = await fetchRestaurants("17.406498", "78.47724389999999", "DESKTOP_WEB_LISTING");
       console.log("Received data:", json_data);
+
       const restaurant_obj_data_from_api =
         json_data?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
           ?.restaurants;
       
       if (restaurant_obj_data_from_api) {
         set_all_restaurants(restaurant_obj_data_from_api);
+        set_filtered_restaurants(restaurant_obj_data_from_api);
       } else {
-        console.error("Unexpected data structure:", json_data);
+        setError("Unexpected data structure in the API response");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      setError(error.message || "An error occurred while fetching data");
+    } finally {
+      setIsLoading(false);
     }
   };
 
