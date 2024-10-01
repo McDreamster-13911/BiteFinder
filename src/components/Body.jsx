@@ -4,7 +4,7 @@ import Shimmer from "./Shimmer";
 import Search_Component from "./Search_Component";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
-import { fetchRestaurants } from "utils/api";
+import { fetchRestaurants } from "../utils/api";
 
 const Body = () => {
   const [all_restaurants, set_all_restaurants] = useState([]);
@@ -33,7 +33,7 @@ const Body = () => {
 
   const fetch_data = async () => {
     try {
-      setIsLoading(true);
+      
       const json_data = await fetchRestaurants("17.406498", "78.47724389999999", "DESKTOP_WEB_LISTING");
       console.log("Received data:", json_data);
 
@@ -45,14 +45,12 @@ const Body = () => {
         set_all_restaurants(restaurant_obj_data_from_api);
         set_filtered_restaurants(restaurant_obj_data_from_api);
       } else {
-        setError("Unexpected data structure in the API response");
+        console.log("Unexpected data structure in the API response");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError(error.message || "An error occurred while fetching data");
-    } finally {
-      setIsLoading(false);
-    }
+      console.log(error.message || "An error occurred while fetching data");
+    } 
   };
 
   const online_status = useOnlineStatus();
